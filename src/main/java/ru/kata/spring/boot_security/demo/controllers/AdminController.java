@@ -26,6 +26,7 @@ public class AdminController {
         model.addAttribute("user", userPrincipal);
         model.addAttribute("newUser", new User());
         model.addAttribute("allUsers", userService.getAllUsers());
+        model.addAttribute("roles", userService.getAllRoles());
         return "allUsers";
     }
 
@@ -36,7 +37,7 @@ public class AdminController {
         return "new";
     }
 
-    @PostMapping("/new")
+    @PostMapping
     public String create(@ModelAttribute("newUser") User user) {
         userService.addUser(user);
         return "redirect:/admin";
@@ -46,7 +47,7 @@ public class AdminController {
     public String edit(Model model, @PathVariable("id") Long id) {
         model.addAttribute("user", userService.getUser(id));
         model.addAttribute("roles", userService.getAllRoles());
-        return "edit";
+        return "/edit";
     }
 
     @PatchMapping ("/{id}")
