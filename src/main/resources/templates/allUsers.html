@@ -36,6 +36,7 @@
                 <td th:text="${user.getCountry()}"/>
                 <td th:each="role : ${user.getRoles()}">
                     <th:block th:text="${role.getName()}"></th:block>
+                    
                 </td>
                 <td>
                     <a th:href="@{/admin/{id}/edit(id=${user.getId()})}">Edit</a>

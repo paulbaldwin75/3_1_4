@@ -17,10 +17,14 @@
     <input type="text" th:field="*{country}" id="country">
     <br>
     <label for="password">Enter password</label>
-    <input type="text" th:field="*{password}" id="password">
+    <input type="password" th:field="*{password}" id="password">
     <br>
-    <label for="roles">Enter roles</label>
-    <input type="text" th:field="*{roles}" id="roles">
+    <label for="role">Role</label>
+    <select multiple="multiple" th:field="*{roles}"
+            type="text" id="role">
+        <option th:each="role : ${roles}" th:value="${role.getId()}" th:text="${role.getName()}"></option>
+
+    </select>
     <br/>
     <input type="submit" value="Create">
 </form>

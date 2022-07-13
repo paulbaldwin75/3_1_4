@@ -29,7 +29,8 @@
         <td th:text="${user.getAge()}"/>
         <td th:text="${user.getCountry()}"/>
         <td th:each="role : ${user.getRoles()}">
-            <th:block th:text="${role.getName()}"></th:block>
+            <th:block  th:text="${role.getName()}">
+            </th:block>
         </td>
     </tr>
     </tbody>

@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.repositories.RoleRepository;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
@@ -16,11 +17,13 @@ import java.util.List;
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public UserService(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.roleRepository = roleRepository;
     }
 
     public User findByName(String name){
@@ -38,11 +41,6 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public void deleteUser(User user) {
-        userRepository.delete(user);
-    }
-
-    @Transactional
     public void updateUser(User user) {
         User userFromDb = userRepository.getById(user.getId());
         if(!userFromDb.getPassword().equals(user.getPassword())) {
@@ -53,6 +51,10 @@ public class UserService implements UserDetailsService {
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    public List<Role> getAllRoles() {
+        return roleRepository.findAll();
     }
 
     public User getUser(Long id) {
