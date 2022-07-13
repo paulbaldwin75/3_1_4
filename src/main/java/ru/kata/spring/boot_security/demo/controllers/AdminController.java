@@ -15,7 +15,6 @@ import java.util.List;
 public class AdminController {
 
     private final UserService userService;
-    private RoleRepository roleRepository;
 
     public AdminController(UserService userService) {
         this.userService = userService;
