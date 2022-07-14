@@ -14,33 +14,38 @@ import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 import java.util.List;
 
 @Service
-public class UserService implements UserDetailsService {
+public class UserServiceImpl implements UserDetailsService, UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.roleRepository = roleRepository;
     }
 
+    @Override
     public User findByName(String name){
         return userRepository.findByName(name);
     }
 
     @Transactional
+    @Override
     public void addUser(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
+
     @Transactional
+    @Override
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
 
     @Transactional
+    @Override
     public void updateUser(User user) {
         User userFromDb = userRepository.getById(user.getId());
         if(!userFromDb.getPassword().equals(user.getPassword())) {
@@ -49,6 +54,7 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
+    @Override
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
@@ -57,6 +63,7 @@ public class UserService implements UserDetailsService {
         return roleRepository.findAll();
     }
 
+    @Override
     public User getUser(Long id) {
         return userRepository.findById(id).orElse(null);
     }

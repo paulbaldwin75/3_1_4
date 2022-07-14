@@ -4,11 +4,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.models.User;
-import ru.kata.spring.boot_security.demo.repositories.RoleRepository;
 import ru.kata.spring.boot_security.demo.services.UserService;
+import ru.kata.spring.boot_security.demo.services.UserServiceImpl;
 
 import java.security.Principal;
-import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
@@ -16,14 +15,14 @@ public class AdminController {
 
     private final UserService userService;
 
-    public AdminController(UserService userService) {
-        this.userService = userService;
+    public AdminController(UserServiceImpl userServiceImpl) {
+        this.userService = userServiceImpl;
     }
 
     @GetMapping
     public String getUsers(Model model, Principal principal){
         User userPrincipal = userService.findByName(principal.getName());
-        model.addAttribute("user", userPrincipal);
+        model.addAttribute("userPrincipal", userPrincipal);
         model.addAttribute("newUser", new User());
         model.addAttribute("allUsers", userService.getAllUsers());
         model.addAttribute("roles", userService.getAllRoles());
@@ -50,15 +49,16 @@ public class AdminController {
         return "/edit";
     }
 
-    @PatchMapping ("/{id}")
-    public String update(@ModelAttribute("userEdit") User user, @PathVariable("id") Long id) {
-        user.setId(id);
+    @PatchMapping
+    public String update(@ModelAttribute("userEdit") User user) {
+
         userService.updateUser(user);
         return "redirect:/admin";
     }
 
-    @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") Long id) {
+    @DeleteMapping
+    public String delete(@ModelAttribute("userDelete") User user) {
+        Long id = user.getId();
         userService.deleteUser(id);
         return "redirect:/admin";
     }

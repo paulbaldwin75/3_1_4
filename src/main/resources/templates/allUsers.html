@@ -11,7 +11,7 @@
 <body>
 <nav class="navbar navbar-expand-xl navbar-dark bg-dark">
     <div class="container-fluid">
-        <h3 class="text-white"><strong><th th:text="${user.getUsername}"/></strong> <small>with roles: <th th:each="role : ${user.getRoles()}">
+        <h3 class="text-white"><strong><th th:text="${userPrincipal.getUsername}"/></strong> <small>with roles: <th th:each="role : ${userPrincipal.getRoles()}">
             <th:block th:text="${role.getName}"></th:block></small></h3>
     </div>
     <div>
@@ -62,60 +62,60 @@
                                 <th scope="col">Delete</th>
                             </tr>
                             <tbody>
-                            <tr th:each="user : ${allUsers}">
-                                <td th:text="${user.getId()}"/>
-                                <td th:text="${user.getName()}"/>
-                                <td th:text="${user.getAge()}"/>
-                                <td th:text="${user.getCountry()}"/>
+                            <tr th:each="user1 : ${allUsers}">
+                                <td th:text="${user1.getId()}"/>
+                                <td th:text="${user1.getName()}"/>
+                                <td th:text="${user1.getAge()}"/>
+                                <td th:text="${user1.getCountry()}"/>
                                 <td>
-                                    <div th:each="role : ${user.getRoles()}"
-                                         th:text="${role.getName()}">
+                                    <div th:each="role1 : ${user1.getRoles()}"
+                                         th:text="${role1.getName()}">
                                     </div>
                                 </td>
                                 <td>
 
                                     <!-- Кнопка-триггер модального окна -->
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" >
                                         edit
                                     </button>
 
                                     <!-- Модальное окно -->
-                                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <h5 class="modal-title" id="exampleModalLabel">Edit user</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
 
-                                                    <form id="data" th:method="PATCH" th:action="@{/admin}">
+                                                    <form id="data" th:method="patch" th:action="@{/admin }" >
 
                                                         <div class="form-group text-center row justify-content-center align-items-center">
                                                             <div class="col-sm-6">
                                                                 <label for="userId" class="center-block"><span class="font-weight-bold"><strong>ID</strong></span></label>
-                                                                <input type="text" class="form-control collection-ville text-center" id="userId" name="id" th:value="${user.getId()}" th:name="id" readonly="readonly">
+                                                                <input type="text" class="form-control collection-ville text-center" id="userId" name="id" th:value="${user1.getId()}" th:name="id" readonly="readonly">
                                                             </div>
                                                         </div>
 
                                                         <div class="form-group text-center row justify-content-center align-items-center">
                                                             <div class="col-sm-6">
                                                                 <label for="userName2" class="center-block"><span class="font-weight-bold"><strong>Name</strong></span></label>
-                                                                <input type="text" class="form-control collection-ville text-center" id="userName2" name="name" th:value="${user.getName()}" th:name="name">
+                                                                <input type="text" class="form-control collection-ville text-center" id="userName2" name="name" th:value="${user1.getName()}" th:name="name">
                                                             </div>
                                                         </div>
 
                                                         <div class="form-group text-center row justify-content-center align-items-center">
                                                             <div class="col-sm-6">
                                                                 <label for="userAge" class="center-block"><span class="font-weight-bold"><strong>Age</strong></span></label>
-                                                                <input type="text" class="form-control collection-ville text-center" id="userAge" name="age" th:value="${user.getAge()}" th:name="age">
+                                                                <input type="text" class="form-control collection-ville text-center" id="userAge" name="age" th:value="${user1.getAge()}" th:name="age">
                                                             </div>
                                                         </div>
 
                                                         <div class="form-group text-center row justify-content-center align-items-center">
                                                             <div class="col-sm-6">
                                                                 <label for="userCountry" class="center-block"><span class="font-weight-bold"><strong>Country</strong></span></label>
-                                                                <input type="text" class="form-control collection-ville text-center" id="userCountry" name="country" th:value="${user.getCountry()}" th:name="country">
+                                                                <input type="text" class="form-control collection-ville text-center" id="userCountry" name="country" th:value="${user1.getCountry()}" th:name="country">
                                                             </div>
                                                         </div>
 
@@ -173,28 +173,28 @@
                                                         <div class="form-group text-center row justify-content-center align-items-center">
                                                             <div class="col-sm-6">
                                                                 <label for="userIddel" class="center-block"><span class="font-weight-bold"><strong>ID</strong></span></label>
-                                                                <input type="text" class="form-control collection-ville text-center" id="userIddel" name="id" th:value="${user.getId()}" th:name="id" readonly="readonly">
+                                                                <input type="text" class="form-control collection-ville text-center" id="userIddel" name="id" th:value="${user1.getId()}" th:name="id" readonly="readonly">
                                                             </div>
                                                         </div>
 
                                                         <div class="form-group text-center row justify-content-center align-items-center">
                                                             <div class="col-sm-6">
                                                                 <label for="userNamedele" class="center-block"><span class="font-weight-bold"><strong>Name</strong></span></label>
-                                                                <input type="text" class="form-control collection-ville text-center" id="userNamedele" name="name" th:value="${user.getName()}" th:name="name" readonly="readonly">
+                                                                <input type="text" class="form-control collection-ville text-center" id="userNamedele" name="name" th:value="${user1.getName()}" th:name="name" readonly="readonly">
                                                             </div>
                                                         </div>
 
                                                         <div class="form-group text-center row justify-content-center align-items-center">
                                                             <div class="col-sm-6">
                                                                 <label for="userAgedel" class="center-block"><span class="font-weight-bold"><strong>Age</strong></span></label>
-                                                                <input type="text" class="form-control collection-ville text-center" id="userAgedel" name="age" th:value="${user.getAge()}" th:name="age" readonly="readonly">
+                                                                <input type="text" class="form-control collection-ville text-center" id="userAgedel" name="age" th:value="${user1.getAge()}" th:name="age" readonly="readonly">
                                                             </div>
                                                         </div>
 
                                                         <div class="form-group text-center row justify-content-center align-items-center">
                                                             <div class="col-sm-6">
                                                                 <label for="userCountrydel" class="center-block"><span class="font-weight-bold"><strong>Country</strong></span></label>
-                                                                <input type="text" class="form-control collection-ville text-center" id="userCountrydel" name="country" th:value="${user.getCountry()}" th:name="country" readonly="readonly">
+                                                                <input type="text" class="form-control collection-ville text-center" id="userCountrydel" name="country" th:value="${user1.getCountry()}" th:name="country" readonly="readonly">
                                                             </div>
                                                         </div>
 
