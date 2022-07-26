@@ -11,7 +11,7 @@
 <body>
 <nav class="navbar navbar-expand-xl navbar-dark bg-dark">
     <div class="container-fluid">
-        <h3 class="text-white"><strong><th th:text="${userPrincipal.getUsername}"/></strong> <small>with roles: <th th:each="role : ${userPrincipal.getRoles()}">
+        <h3 class="text-white"><strong><th th:text="${userPrincipal.getName()}"/></strong> <small>with roles: <th th:each="role : ${userPrincipal.getRoles()}">
             <th:block th:text="${role.getName}"></th:block></small></h3>
     </div>
     <div>
@@ -23,10 +23,10 @@
 <div class="row">
     <div class="col-3">
         <div class="nav flex-column nav-pills pt-4" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-            <a class="nav-link active" href="/admin" sec:authorize="hasAuthority('ADMIN')" role="tab"
-               aria-controls="v-pills-home" aria-selected="true">Admin</a>
-            <a class="nav-link" href="/user" sec:authorize="(hasAnyAuthority('ADMIN', 'USER'))" role="tab"
-               aria-controls="v-pills-profile" aria-selected="false">User</a>
+            <a class="nav-link active" href="/admin" sec:authorize="hasRole('ROLE_ADMIN')" role="tab"
+               aria-controls="v-pills-home" aria-selected="false">Admin</a>
+            <a class="nav-link" href="/user" sec:authorize="(hasAnyRole('ROLE_ADMIN', 'ROLE_USER'))" role="tab"
+               aria-controls="v-pills-profile" aria-selected="true">User</a>
         </div>
     </div>
     <div class="col-9 bg-light">
@@ -75,12 +75,12 @@
                                 <td>
 
                                     <!-- Кнопка-триггер модального окна -->
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" >
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" th:data-bs-target="${'#edituser'+ user1.getId()}" >
                                         edit
                                     </button>
 
                                     <!-- Модальное окно -->
-                                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+                                    <div class="modal fade" th:id="${'edituser' + user1.getId()}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
@@ -89,7 +89,7 @@
                                                 </div>
                                                 <div class="modal-body">
 
-                                                    <form id="data" th:method="patch" th:action="@{/admin }" >
+                                                    <form id="data" th:method="post" th:action="@{/admin/edit }" th:object="${userEdit}">
 
                                                         <div class="form-group text-center row justify-content-center align-items-center">
                                                             <div class="col-sm-6">
@@ -129,12 +129,12 @@
                                                         <div class="form-group text-center row justify-content-center align-items-center">
                                                             <div class="col-sm-6">
                                                                 <label for="role" class="center-block"><span class="font-weight-bold"><strong>Role</strong></span></label>
-                                                                <select multiple="multiple" th:field="*{roles}" type="text" id="role" class="form-control collection-ville text-center">
-                                                                    <option th:each="role : ${roles}" th:value="${role.getId()}" th:text="${role.getName()}"></option>
+                                                                <select multiple="multiple" th:name="*{roles}" type="text" id="role" class="form-control collection-ville text-center">
+                                                                    <option th:each="role : ${roles}" th:name="${role.getId()}" th:text="${role.getName()}"></option>
 
                                                                 </select>
 <!--                                                                <label for="userRole" class="center-block"><span class="font-weight-bold"><strong>Role</strong></span></label>-->
-<!--                                                                <input type="text" class="form-control collection-ville text-center" id="userRole" name="roles" th:value="${user.getRoles()}" th:name="roles">-->
+<!--                                                                <input type="text" class="form-control collection-ville text-center" id="userRole" name="roles" th:value="${user1.getRoles()}" th:name="roles">-->
                                                             </div>
                                                         </div>
                                                     </form>
@@ -154,76 +154,78 @@
                                     <!--                                </form>-->
 
                                     <!-- Кнопка-триггер модального окна -->
-                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModalDel">
-                                        delete
-                                    </button>
+                                <!-- Кнопка-триггер модального окна -->
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" th:data-bs-target="${'#deleteUser'+ user1.getId()}">
+                                    delete
+                                </button>
 
-                                    <!-- Модальное окно -->
-                                    <div class="modal fade" id="exampleModalDel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabeldel">Delete user</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
-                                                </div>
-                                                <div class="modal-body">
+                                <!-- Модальное окно -->
+                                <div class="modal fade" th:id="${'deleteUser'+ user1.getId()}" tabindex="-1" aria-labelledby="exampleM" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleM">Delete user</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                                            </div>
+                                            <div class="modal-body">
 
-                                                    <form id="del" th:method="DELETE" th:action="@{/admin}">
+                                                <form id="del" th:method="DELETE" th:action="@{/admin}" th:object="${userDelete}">
 
-                                                        <div class="form-group text-center row justify-content-center align-items-center">
-                                                            <div class="col-sm-6">
-                                                                <label for="userIddel" class="center-block"><span class="font-weight-bold"><strong>ID</strong></span></label>
-                                                                <input type="text" class="form-control collection-ville text-center" id="userIddel" name="id" th:value="${user1.getId()}" th:name="id" readonly="readonly">
-                                                            </div>
+                                                    <div class="form-group text-center row justify-content-center align-items-center">
+                                                        <div class="col-sm-6">
+                                                            <label for="userIddel" class="center-block"><span class="font-weight-bold"><strong>ID</strong></span></label>
+                                                            <input type="text" class="form-control collection-ville text-center" id="userIddel" name="id" th:value="${user1.getId()}" th:name="id" readonly="readonly">
                                                         </div>
+                                                    </div>
 
-                                                        <div class="form-group text-center row justify-content-center align-items-center">
-                                                            <div class="col-sm-6">
-                                                                <label for="userNamedele" class="center-block"><span class="font-weight-bold"><strong>Name</strong></span></label>
-                                                                <input type="text" class="form-control collection-ville text-center" id="userNamedele" name="name" th:value="${user1.getName()}" th:name="name" readonly="readonly">
-                                                            </div>
+                                                    <div class="form-group text-center row justify-content-center align-items-center">
+                                                        <div class="col-sm-6">
+                                                            <label for="userNamedele" class="center-block"><span class="font-weight-bold"><strong>First name</strong></span></label>
+                                                            <input type="text" class="form-control collection-ville text-center" id="userNamedele" name="name" th:value="${user1.getName()}" th:name="name" readonly="readonly">
                                                         </div>
+                                                    </div>
 
-                                                        <div class="form-group text-center row justify-content-center align-items-center">
-                                                            <div class="col-sm-6">
-                                                                <label for="userAgedel" class="center-block"><span class="font-weight-bold"><strong>Age</strong></span></label>
-                                                                <input type="text" class="form-control collection-ville text-center" id="userAgedel" name="age" th:value="${user1.getAge()}" th:name="age" readonly="readonly">
-                                                            </div>
+
+                                                    <div class="form-group text-center row justify-content-center align-items-center">
+                                                        <div class="col-sm-6">
+                                                            <label for="userAgedel" class="center-block"><span class="font-weight-bold"><strong>Age</strong></span></label>
+                                                            <input type="text" class="form-control collection-ville text-center" id="userAgedel" name="age" th:value="${user1.getAge()}" th:name="age" readonly="readonly">
                                                         </div>
+                                                    </div>
 
-                                                        <div class="form-group text-center row justify-content-center align-items-center">
-                                                            <div class="col-sm-6">
-                                                                <label for="userCountrydel" class="center-block"><span class="font-weight-bold"><strong>Country</strong></span></label>
-                                                                <input type="text" class="form-control collection-ville text-center" id="userCountrydel" name="country" th:value="${user1.getCountry()}" th:name="country" readonly="readonly">
-                                                            </div>
+                                                    <div class="form-group text-center row justify-content-center align-items-center">
+                                                        <div class="col-sm-6">
+                                                            <label for="userEmaildel" class="center-block"><span class="font-weight-bold"><strong>Country</strong></span></label>
+                                                            <input type="text" class="form-control collection-ville text-center" id="userEmaildel" name="email" th:value="${user1.getCountry()}" th:name="country" readonly="readonly">
                                                         </div>
+                                                    </div>
 
-                                                        <div class="form-group text-center row justify-content-center align-items-center">
-                                                            <div class="col-sm-6">
-                                                                <label for="userPassworddel" class="center-block"><span class="font-weight-bold"><strong>Password</strong></span></label>
-                                                                <input type="text" class="form-control collection-ville text-center" id="userPassworddel" name="password" th:name="password" readonly="readonly">
-                                                            </div>
+                                                    <div class="form-group text-center row justify-content-center align-items-center">
+                                                        <div class="col-sm-6">
+                                                            <label for="userPassworddel" class="center-block"><span class="font-weight-bold"><strong>Password</strong></span></label>
+                                                            <input type="text" class="form-control collection-ville text-center" id="userPassworddel" name="password" th:name="password" readonly="readonly">
                                                         </div>
+                                                    </div>
 
-                                                        <div class="form-group text-center row justify-content-center align-items-center">
-                                                            <div class="col-sm-6">
-                                                                <label for="userRoledel" class="center-block"><span class="font-weight-bold"><strong>Role</strong></span></label>
-                                                                <select multiple="multiple" th:field="*{roles}" type="text" id="userRoledel" class="form-control collection-ville text-center">
-                                                                    <option th:each="role : ${roles}" th:value="${role.getId()}" th:text="${role.getName()}"></option>
+                                                    <div class="form-group text-center row justify-content-center align-items-center">
+                                                        <div class="col-sm-6">
+                                                            <label for="roledel" class="center-block"><span class="font-weight-bold"><strong>Role</strong></span></label>
+                                                            <select multiple="multiple" th:name="*{roles}" type="text" id="roledel" class="form-control collection-ville text-center">
+                                                                <option th:each="role : ${roles}" th:name="${role.getId()}" th:text="${role.getName()}"></option>
 
-                                                                </select>
-                                                            </div>
+                                                            </select>
                                                         </div>
-                                                    </form>
+                                                    </div>
+                                                </form>
 
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                    <button type="submit" form="del" class="btn btn-primary">Delete</button>
-                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" form="del" class="btn btn-primary">Delete</button>
                                             </div>
                                         </div>
                                     </div>
+                                </div>
 
                                 </td>
                             </tr>
