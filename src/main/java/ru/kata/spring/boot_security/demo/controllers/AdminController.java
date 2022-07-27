@@ -3,6 +3,7 @@ package ru.kata.spring.boot_security.demo.controllers;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.services.RoleService;
 import ru.kata.spring.boot_security.demo.services.RoleServiceImpl;
@@ -10,6 +11,8 @@ import ru.kata.spring.boot_security.demo.services.UserService;
 import ru.kata.spring.boot_security.demo.services.UserServiceImpl;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
@@ -29,8 +32,6 @@ public class AdminController {
         User userPrincipal = userService.findByName(principal.getName());
         model.addAttribute("userPrincipal", userPrincipal);
         model.addAttribute("newUser", new User());
-        model.addAttribute("userEdit", new User());
-        model.addAttribute("userDelete", new User());
         model.addAttribute("allUsers", userService.getAllUsers());
         model.addAttribute("roles", roleService.getAllRoles());
         return "allUsers";
@@ -51,21 +52,19 @@ public class AdminController {
 
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") Long id) {
-        model.addAttribute("user", userService.getUser(id));
+        model.addAttribute("userEdit", userService.getUser(id));
         model.addAttribute("roles", roleService.getAllRoles());
         return "/edit";
     }
 
-    @PostMapping("/edit")
-    public String update(@ModelAttribute("userEdit") User user) {
-
-        userService.updateUser(user);
+    @PatchMapping("/{id}")
+    public String update(@ModelAttribute("newUser") User userEdit) {
+        userService.updateUser(userEdit);
         return "redirect:/admin";
     }
 
-    @DeleteMapping
-    public String delete(@ModelAttribute("userDelete") User user) {
-        Long id = user.getId();
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable("id") Long id) {
         userService.deleteUser(id);
         return "redirect:/admin";
     }

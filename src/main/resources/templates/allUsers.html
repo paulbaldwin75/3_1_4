@@ -75,12 +75,12 @@
                                 <td>
 
                                     <!-- Кнопка-триггер модального окна -->
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" th:data-bs-target="${'#edituser'+ user1.getId()}" >
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" th:href="${'#edituser'+ user1.getId()}" >
                                         edit
                                     </button>
 
                                     <!-- Модальное окно -->
-                                    <div class="modal fade" th:id="${'edituser' + user1.getId()}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+                                    <div class="modal fade" th:id="${'edituser' + user1.id}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
@@ -89,7 +89,7 @@
                                                 </div>
                                                 <div class="modal-body">
 
-                                                    <form id="data" th:method="post" th:action="@{/admin/edit }" th:object="${userEdit}">
+                                                    <form id="data" th:method="patch" th:action="@{/admin/{id}(id=${user1.id})}">
 
                                                         <div class="form-group text-center row justify-content-center align-items-center">
                                                             <div class="col-sm-6">
@@ -129,21 +129,28 @@
                                                         <div class="form-group text-center row justify-content-center align-items-center">
                                                             <div class="col-sm-6">
                                                                 <label for="role" class="center-block"><span class="font-weight-bold"><strong>Role</strong></span></label>
-                                                                <select multiple="multiple" th:name="*{roles}" type="text" id="role" class="form-control collection-ville text-center">
-                                                                    <option th:each="role : ${roles}" th:name="${role.getId()}" th:text="${role.getName()}"></option>
+                                                                <select multiple="multiple" name="roles" type="text" id="role" class="form-control collection-ville text-center">
+                                                                    <div th:each="role : ${roles}">
+                                                                    <option
+                                                                            th:value="${role.getId()}"
+                                                                            th:text="${role.getName()}"
+                                                                            th:field="*{roles}">
+                                                                    </option>
+                                                                    </div>
 
                                                                 </select>
 <!--                                                                <label for="userRole" class="center-block"><span class="font-weight-bold"><strong>Role</strong></span></label>-->
 <!--                                                                <input type="text" class="form-control collection-ville text-center" id="userRole" name="roles" th:value="${user1.getRoles()}" th:name="roles">-->
                                                             </div>
                                                         </div>
+                                                        <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                        <button type="submit" form="data" class="btn btn-primary">Edit</button>
+                                                    </div>
                                                     </form>
 
                                                 </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                    <button type="submit" form="data" class="btn btn-primary">Edit</button>
-                                                </div>
+
                                             </div>
                                         </div>
                                     </div>
@@ -169,7 +176,7 @@
                                             </div>
                                             <div class="modal-body">
 
-                                                <form id="del" th:method="DELETE" th:action="@{/admin}" th:object="${userDelete}">
+                                                <form id="del" th:method="DELETE" th:action="@{/admin/{id}(id=${user1.id})}">
 
                                                     <div class="form-group text-center row justify-content-center align-items-center">
                                                         <div class="col-sm-6">
