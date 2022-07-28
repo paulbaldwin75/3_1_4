@@ -145,7 +145,7 @@
                                                         </div>
                                                         <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                        <button type="submit" form="data" class="btn btn-primary">Edit</button>
+                                                        <button type="submit" class="btn btn-primary">Edit</button>
                                                     </div>
                                                     </form>
 
@@ -162,12 +162,12 @@
 
                                     <!-- Кнопка-триггер модального окна -->
                                 <!-- Кнопка-триггер модального окна -->
-                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" th:data-bs-target="${'#deleteUser'+ user1.getId()}">
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" th:href="${'#deleteUser'+ user1.getId()}">
                                     delete
                                 </button>
 
                                 <!-- Модальное окно -->
-                                <div class="modal fade" th:id="${'deleteUser'+ user1.getId()}" tabindex="-1" aria-labelledby="exampleM" aria-hidden="true">
+                                <div class="modal fade" th:id="${'deleteUser'+ user1.getId()}" th:data-user-id="${user1.id}" tabindex="-1" aria-labelledby="exampleM" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -217,19 +217,20 @@
                                                     <div class="form-group text-center row justify-content-center align-items-center">
                                                         <div class="col-sm-6">
                                                             <label for="roledel" class="center-block"><span class="font-weight-bold"><strong>Role</strong></span></label>
-                                                            <select multiple="multiple" th:name="*{roles}" type="text" id="roledel" class="form-control collection-ville text-center">
+                                                            <select multiple="multiple" th:name="*{roles}" type="text" id="roledel" class="form-control collection-ville text-center" disabled>
                                                                 <option th:each="role : ${roles}" th:name="${role.getId()}" th:text="${role.getName()}"></option>
 
                                                             </select>
                                                         </div>
                                                     </div>
+                                                    <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-primary">Delete</button>
+                                                    </div>
                                                 </form>
 
                                             </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                <button type="submit" form="del" class="btn btn-primary">Delete</button>
-                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
