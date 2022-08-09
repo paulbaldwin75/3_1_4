@@ -46,7 +46,6 @@ public class AdminRestController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @Transactional
     @PutMapping("{id}")
     public ResponseEntity<User> updateUser(@RequestBody User user) {
         userService.updateUser(user);

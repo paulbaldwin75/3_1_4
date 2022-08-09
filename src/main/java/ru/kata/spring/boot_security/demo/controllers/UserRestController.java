@@ -11,10 +11,10 @@ import java.security.Principal;
 
 @RestController
 @RequestMapping("/api")
-public class userRestController {
+public class UserRestController {
     private final UserRepository userRepo;
 
-    public userRestController(UserRepository userRepo) {
+    public UserRestController(UserRepository userRepo) {
         this.userRepo = userRepo;
     }
 
